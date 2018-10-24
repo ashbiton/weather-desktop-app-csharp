@@ -1,0 +1,71 @@
+﻿<Window x:Class="PL.MainWindow"
+        Name="WindowMain"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:PL"
+        xmlns:Converters="clr-namespace:PL.Converters"
+        
+        mc:Ignorable="d"
+        Title="Weather App" Height="450" Width="800">
+    <Window.Resources>
+        <Converters:ListSizeToFontSizeConverter x:Key="ListSizeToFontSizeConverter"/>
+        <Converters:HeightOfWindowToChartSizeConverter x:Key="HeightOfWindowToChartSizeConverter"/>
+    </Window.Resources>
+    <Grid Name="MainGrid">
+        <Grid.Background>
+            <ImageBrush ImageSource="Images\sky_107.bmp" Stretch="Fill"/>
+        </Grid.Background>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="1*" />
+            <RowDefinition Height="8*"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="2*"/>
+            <ColumnDefinition Width="8*"/>
+        </Grid.ColumnDefinitions>
+        <Rectangle Grid.Column="0" Grid.Row="0" Stroke="Transparent" StrokeThickness="0">
+            <Rectangle.Fill>
+                <SolidColorBrush Color="Black" Opacity="0.2"/>
+            </Rectangle.Fill>
+        </Rectangle>
+        <UserControl Name="ButtonsUserControl" Grid.Row="0" Grid.Column="1" Content="{Binding MainWindowButtons}" Background="Black" Opacity="0.2" BorderThickness="0"/>
+        <UserControl Padding="0,10,0,0"  Name="userControl" Grid.Row="1" Grid.Column="1" Content="{Binding UserControl}" BorderThickness="0"/>
+        <ListView Name="CitiesListView" FontSize="{Binding ElementName=CitiesListView, Path=ActualHeight, Converter={StaticResource ListSizeToFontSizeConverter}}" 
+                  BorderThickness="0" Background="Black" Opacity="0.2" Foreground="White" Grid.Row="1" 
+                  Grid.Column="0" ItemsSource="{Binding Cities}" SelectedItem="{Binding City}">
+
+            <ListView.ItemContainerStyle>
+
+                <Style TargetType="{x:Type ListViewItem}">
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="{x:Type ListViewItem}">
+                                <ContentPresenter />
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+
+                    <Style.Triggers>
+                        <Trigger Property="IsSelected" Value="True">
+                            <Setter Property="BorderBrush" Value="White"/>
+                            <Setter Property="BorderThickness" Value="2"/>
+                            <Setter Property="FontWeight" Value="Bold"/>
+                            <Setter Property="FontSize" Value="{Binding ElementName=CitiesListView, Path=ActualHeight, Converter={StaticResource HeightOfWindowToChartSizeConverter}}"/>
+                        </Trigger>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter Property="ContentTemplate">
+                                <Setter.Value>
+                                    <DataTemplate>
+                                        <TextBlock TextDecorations="Underline" Text="{TemplateBinding Content}"/>
+                                    </DataTemplate>
+                                </Setter.Value>
+                            </Setter>
+                        </Trigger>
+                    </Style.Triggers>
+                </Style>
+            </ListView.ItemContainerStyle>
+        </ListView>
+    </Grid>
+</Window> 
